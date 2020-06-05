@@ -5,5 +5,7 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-  name = os.environ.get('VECTORIZER_NAME', 'gorilla')
-  return jsonify(status=f'OK from vectorizer: {name}')
+  identifier = os.environ.get('VECTORIZER_IDENTIFIER')
+  width = int(os.environ.get('VECTORIZER_WIDTH', '0'))
+  constructor = os.environ.get('VECTORIZER_CONSTRUCTOR')
+  return jsonify(identifier=identifier, width=width, constructor=constructor)

@@ -6,6 +6,8 @@ services:
       dockerfile: Dockerfile-dispatcher
     environment:
       FLASK_ENV: development
+      DISPATCHER_VECTORIZERS: http://vectorizer-1:8000,http://vectorizer-2:8000
+      DISPATCHER_PREDICTORS: http://predictor-1:8000
     command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload dispatcher.api:app
     ports:
       - 5000:8000
@@ -39,4 +41,17 @@ services:
       - 5002:8000
     volumes:
       - ./vectorizer:/vectorizer
-    
+  predictor-1:
+    build:
+      context: .
+      dockerfile: Dockerfile-predictor
+    environment:
+      FLASK_ENV: development
+      PREDICTOR_HEIGHT: "1000"
+      PREDICTOR_TYPE: float32
+    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload predictor.api:app
+    ports:
+      - 5003:8000
+    volumes:
+      - ./predictor:/predictor
+        

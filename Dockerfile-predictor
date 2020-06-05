@@ -1,4 +1,4 @@
 FROM python:latest
 COPY ./predictor/*.py /predictor/
-COPY requirements.txt /predictor/
+COPY requirements.txt ./
 RUN pip install -r requirements.txt
