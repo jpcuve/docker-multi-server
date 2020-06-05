@@ -1,9 +1,10 @@
-from flask import Flask, current_app, jsonify
+from flask import current_app, jsonify
 import os
+from flask.blueprints import Blueprint
 
-app = Flask(__name__)
+bp = Blueprint('api', __name__, url_prefix='/api')
 
-@app.route('/')
+@bp.route('/')
 def index():
   identifier = os.environ.get('VECTORIZER_IDENTIFIER')
   width = int(os.environ.get('VECTORIZER_WIDTH', '0'))

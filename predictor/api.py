@@ -1,10 +1,10 @@
-from flask import Flask
-from flask.json import jsonify
+from flask import current_app, jsonify
 import os
+from flask.blueprints import Blueprint
 
-app = Flask(__name__)
+bp = Blueprint('api', __name__, url_prefix='/api')
 
-@app.route('/')
+@bp.route('/')
 def index():
   height = int(os.environ.get('PREDICTOR_HEIGHT', '0'))
   typ = os.environ.get('PREDICTOR_TYPE')

@@ -6,10 +6,10 @@ services:
       dockerfile: Dockerfile-dispatcher
     environment:
       FLASK_ENV: development
-      DISPATCHER_VECTORIZERS: '["http://vectorizer-1:8000","http://vectorizer-2:8000"]'
-      DISPATCHER_PREDICTORS: '["http://predictor-1:8000","http://predictor-2:8000"]'
+      DISPATCHER_VECTORIZERS: '["http://vectorizer-1:8000/api","http://vectorizer-2:8000/api"]'
+      DISPATCHER_PREDICTORS: '["http://predictor-1:8000/api","http://predictor-2:8000/api"]'
       DISPATCHER_MODELS: '{"combined":[1.0, 1.0], "fig":[1.0, 0], "letters":[0, 1.0]}'
-    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload dispatcher.api:app
+    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload dispatcher:create_app()
     ports:
       - 5000:8000
     volumes:
@@ -23,7 +23,7 @@ services:
       VECTORIZER_WIDTH: "2048"
       VECTORIZER_IDENTIFIER: fig_uspto_v1_18
       VECTORIZER_CONSTRUCTOR: obj:ViennaVectorizer('models/fig_uspto_v1_18.state', 1093)
-    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload vectorizer.api:app
+    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload vectorizer:create_app()
     ports:
       - 5001:8000
     volumes:
@@ -37,7 +37,7 @@ services:
       VECTORIZER_WIDTH: "2048"
       VECTORIZER_IDENTIFIER: fig_uspto_v2_34
       VECTORIZER_CONSTRUCTOR: obj:ViennaVectorizer('models/fig_v2_34.state', 2454)
-    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload vectorizer.api:app
+    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload vectorizer:create_app()
     ports:
       - 5002:8000
     volumes:
@@ -50,7 +50,7 @@ services:
       FLASK_ENV: development
       PREDICTOR_HEIGHT: "1000"
       PREDICTOR_TYPE: float32
-    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload predictor.api:app
+    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload predictor:create_app()
     ports:
       - 5003:8000
     volumes:
@@ -63,7 +63,7 @@ services:
       FLASK_ENV: development
       PREDICTOR_HEIGHT: "1000"
       PREDICTOR_TYPE: float32
-    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload predictor.api:app
+    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload predictor:create_app()
     ports:
       - 5004:8000
     volumes:
