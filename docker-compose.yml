@@ -1,32 +1,42 @@
-version: "3"
+version: "3.7"
 services:
   dispatcher:
-    build: dispatcher/
+    build:
+      context: .
+      dockerfile: Dockerfile-dispatcher
     environment:
       FLASK_ENV: development
-    command: gunicorn --bind 0.0.0.0:5000 --workers 2 --worker-tmp-dir /dev/shm --reload api:app
+    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload dispatcher.api:app
     ports:
-      - 5000:5000
+      - 5000:8000
     volumes:
       - ./dispatcher:/dispatcher
   vectorizer-1:
-    build: vectorizer/
+    build:
+      context: .
+      dockerfile: Dockerfile-vectorizer
     environment:
       FLASK_ENV: development
-      VECTORIZER_NAME: vectorizer 1
-    command: gunicorn --bind 0.0.0.0:5001 --workers 2 --worker-tmp-dir /dev/shm --reload api:app
+      VECTORIZER_WIDTH: "2048"
+      VECTORIZER_IDENTIFIER: fig_uspto_v1_18
+      VECTORIZER_CONSTRUCTOR: obj:ViennaVectorizer('models/fig_uspto_v1_18.state', 1093)
+    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload vectorizer.api:app
     ports:
-      - 5001:5001
+      - 5001:8000
     volumes:
       - ./vectorizer:/vectorizer
   vectorizer-2:
-    build: vectorizer/
+    build:
+      context: .
+      dockerfile: Dockerfile-vectorizer
     environment:
       FLASK_ENV: development
-      VECTORIZER_NAME: vectorizer 2
-    command: gunicorn --bind 0.0.0.0:5002 --workers 2 --worker-tmp-dir /dev/shm --reload api:app
+      VECTORIZER_WIDTH: "2048"
+      VECTORIZER_IDENTIFIER: fig_uspto_v2_34
+      VECTORIZER_CONSTRUCTOR: obj:ViennaVectorizer('models/fig_v2_34.state', 2454)
+    command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload vectorizer.api:app
     ports:
-      - 5002:5002
+      - 5002:8000
     volumes:
       - ./vectorizer:/vectorizer
     
