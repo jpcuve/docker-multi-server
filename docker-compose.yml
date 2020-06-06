@@ -9,11 +9,18 @@ services:
       DISPATCHER_VECTORIZERS: '["http://vectorizer-1:8000/api","http://vectorizer-2:8000/api"]'
       DISPATCHER_PREDICTORS: '["http://predictor-1:8000/api","http://predictor-2:8000/api"]'
       DISPATCHER_MODELS: '{"combined":[1.0, 1.0], "fig":[1.0, 0], "letters":[0, 1.0]}'
+      DISPATCHER_CONFIG_CLASS: dispatcher.config.Config
     command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload dispatcher:create_app()
     ports:
       - 5000:8000
     volumes:
       - ./dispatcher:/dispatcher
+    depends_on: 
+      - db
+      - vectorizer-1
+      - vectorizer-2
+      - predictor-1
+      - predictor-2
   vectorizer-1:
     build:
       context: .
@@ -68,4 +75,11 @@ services:
       - 5004:8000
     volumes:
       - ./predictor:/predictor
-            
+  db:
+    image: mariadb
+    restart: always
+    environment: 
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_DATABASE: ditto
+      MYSQL_USER: ditto
+      MYSQL_PASSWORD: dummy
