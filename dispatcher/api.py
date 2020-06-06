@@ -10,12 +10,10 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/')
 def api_index():
-  database = os.environ.get('DISPATCHER_DATABASE')
   return jsonify(
     vectorizers=current_app.vectorizers, 
     predictors=current_app.predictors, 
-    models=current_app.models, 
-    database=database)
+    models=current_app.models)
 
 
 @bp.route('/create-database')

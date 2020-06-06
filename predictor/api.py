@@ -6,6 +6,6 @@ bp = Blueprint('api', __name__, url_prefix='/api')
 
 @bp.route('/')
 def index():
-  height = int(os.environ.get('PREDICTOR_HEIGHT', '0'))
-  typ = os.environ.get('PREDICTOR_TYPE')
-  return jsonify(height=height, type=typ)
+  return jsonify(
+    height=current_app.height, 
+    feature_type=current_app.feature_type)

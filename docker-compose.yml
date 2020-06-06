@@ -56,7 +56,7 @@ services:
     environment:
       FLASK_ENV: development
       PREDICTOR_HEIGHT: "1000"
-      PREDICTOR_TYPE: float32
+      PREDICTOR_FEATURE_TYPE: float32
     command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload predictor:create_app()
     ports:
       - 5003:8000
@@ -69,7 +69,7 @@ services:
     environment:
       FLASK_ENV: development
       PREDICTOR_HEIGHT: "1000"
-      PREDICTOR_TYPE: float32
+      PREDICTOR_FEATURE_TYPE: float32
     command: gunicorn --bind 0.0.0.0 --workers 2 --worker-tmp-dir /dev/shm --reload predictor:create_app()
     ports:
       - 5004:8000
